@@ -43,13 +43,6 @@ public class Main {
                 new Comic("Spider-Man: Blue", 2002, stanLee, spiderMan)
         );
 
-        //Listado de protagonistas e os seus ids
-        System.out.println("\nLISTADO DE PROTAGONISTAS E OS SEUS IDS:");
-        Map<String, Long> mapaProtagonistas = obterProtagonistasUnicos();
-        for (Map.Entry<String, Long> entry : mapaProtagonistas.entrySet()) {
-            System.out.println("ID: " + entry.getValue() + " - Nome: " + entry.getKey());
-        }
-
         //Inserir poderes na táboa PoderUnico asociandoos aos protagonistas
         inserirPoderSeExiste(mapaProtagonistas, "Spider-Man", "Lanzamento de telarañas");
         inserirPoderSeExiste(mapaProtagonistas, "Spider-Man", "Sentido arácnido");
@@ -108,18 +101,6 @@ public class Main {
         listarFormatoRequerido();
     }
 
-    private static Map<String, Long> obterProtagonistasUnicos() {
-        Map<String, Long> protas = new LinkedHashMap<>();
-        List<Comic> comics = servicioComic.listarComics();
-        if (comics != null) {
-            for (Comic c : comics) {
-                Protagonista p = c.getProtagonista();
-                protas.putIfAbsent(p.getNome(), p.getId());
-            }
-        }
-        return protas;
-    }
-
     private static void inserirPoderSeExiste(Map<String, Long> mapaProtas, String nomeProta, String nomePoder) {
         Long id = mapaProtas.get(nomeProta);
         if (id != null) {
@@ -132,12 +113,6 @@ public class Main {
         if (comics == null || comics.isEmpty()) {
             System.out.println("(Táboas baleiras)");
             return;
-        }
-
-        Map<Long, List<Comic>> comicsPorAutor = new LinkedHashMap<>();
-        for (Comic c : comics) {
-            Long idAutor = c.getAutor().getId();
-            comicsPorAutor.computeIfAbsent(idAutor, k -> new ArrayList<>()).add(c);
         }
 
         for (List<Comic> listaAutor : comicsPorAutor.values()) {
